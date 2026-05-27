@@ -1,0 +1,279 @@
+<div
+  id="UgcGrid-{{ section.id }}"
+  class="ugc-grid color-{{ section.settings.color_scheme }}"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+    <div class="ugc-grid__header">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="ugc-grid__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <p class="ugc-grid__subheading">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="ugc-grid__grid">
+    {%- for i in (1..6) -%}
+      {%- assign image_key = 'image_' | append: i -%}
+      {%- assign caption_key = 'caption_' | append: i -%}
+      {%- assign image = section.settings[image_key] -%}
+      {%- assign caption = section.settings[caption_key] -%}
+
+      <div class="ugc-grid__item">
+        {%- if image != blank -%}
+          <div class="ugc-grid__media">
+            {{
+              image
+              | image_url: width: 800
+              | image_tag:
+                loading: 'lazy',
+                widths: '400, 600, 800',
+                sizes: '(min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw',
+                width: image.width,
+                height: image.height,
+                class: 'ugc-grid__image',
+                alt: image.alt | escape
+            }}
+          </div>
+        {%- else -%}
+          <div class="ugc-grid__media ugc-grid__media--placeholder">
+            {{ 'image' | placeholder_svg_tag: 'ugc-grid__image' }}
+          </div>
+        {%- endif -%}
+        {%- if caption != blank -%}
+          <p class="ugc-grid__caption">{{ caption }}</p>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .ugc-grid {
+    padding-block: var(--spacing-loose, 4rem);
+  }
+
+  .ugc-grid__header {
+    text-align: center;
+    margin-block-end: 2.5rem;
+    padding-inline: var(--page-margin, 1.5rem);
+  }
+
+  .ugc-grid__heading {
+    font-family: var(--font-primary--family);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: var(--font-primary--weight, 400);
+    margin: 0 0 0.5rem;
+  }
+
+  .ugc-grid__subheading {
+    font-family: var(--font-body--family);
+    font-size: 1rem;
+    color: rgb(var(--color-foreground-rgb) / 0.7);
+    margin: 0;
+  }
+
+  .ugc-grid__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    padding-inline: var(--page-margin, 1.5rem);
+  }
+
+  .ugc-grid__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .ugc-grid__media {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 0.25rem;
+    background-color: rgb(var(--color-background-rgb));
+  }
+
+  .ugc-grid__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .ugc-grid__item:hover .ugc-grid__image {
+    transform: scale(1.04);
+  }
+
+  .ugc-grid__caption {
+    font-family: var(--font-body--family);
+    font-size: 0.8125rem;
+    color: rgb(var(--color-foreground-rgb) / 0.65);
+    margin: 0;
+    text-align: center;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ugc-grid__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .ugc-grid__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "UGC Photo Grid",
+  "tag": "section",
+  "class": "section-ugc-grid section-wrapper",
+  "disabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Reading in the Wild"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Our community, lost in their favorite reads"
+    },
+    {
+      "type": "header",
+      "content": "Photo 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_1",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "caption_1",
+      "label": "Caption"
+    },
+    {
+      "type": "header",
+      "content": "Photo 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "caption_2",
+      "label": "Caption"
+    },
+    {
+      "type": "header",
+      "content": "Photo 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_3",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "caption_3",
+      "label": "Caption"
+    },
+    {
+      "type": "header",
+      "content": "Photo 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_4",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "caption_4",
+      "label": "Caption"
+    },
+    {
+      "type": "header",
+      "content": "Photo 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_5",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "caption_5",
+      "label": "Caption"
+    },
+    {
+      "type": "header",
+      "content": "Photo 6"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_6",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "caption_6",
+      "label": "Caption"
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "UGC Photo Grid",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}
